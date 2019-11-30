@@ -6,7 +6,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "dev": "yarn start",
+    "prettier": "prettier --write ./**/*.{js,json}"
   },
   "jest": {
     "preset": "jest-expo"
@@ -29,7 +31,8 @@
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0",
-    "jest-expo": "^35.0.0"
+    "jest-expo": "^35.0.0",
+    "prettier": "^1.19.1"
   },
   "private": true
 }
