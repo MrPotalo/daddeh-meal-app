@@ -76,12 +76,29 @@ class MealScreen extends Component {
       const items = prevState.items.slice();
       items[prevState.modifyingIndex].name = prevState.mealName;
       return {
-        ...prevState,
         items,
         editMode: false,
         modifyingIndex: -1,
         mealName: '',
       };
+    });
+  };
+
+  deleteMeal = i => {
+    this.setState(prevState => {
+      const items = prevState.items.slice();
+      items.splice(i, 1);
+      return {
+        items,
+      };
+    });
+  };
+
+  cancelEdit = () => {
+    this.setState({
+      modifyingIndex: -1,
+      editMode: false,
+      mealName: '',
     });
   };
 
@@ -95,7 +112,9 @@ class MealScreen extends Component {
           addMeal={this.addMeal}
           mealNameChanged={this.mealNameChanged}
           startEdit={this.startEdit}
+          cancelEdit={this.cancelEdit}
           editMeal={this.editMeal}
+          deleteMeal={this.deleteMeal}
         />
       </KeyboardAvoidingView>
     );

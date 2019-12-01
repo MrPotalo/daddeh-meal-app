@@ -29,8 +29,10 @@ class Meal extends Component {
       editing,
       onTitleChange,
       onSubmitEditing,
+      onCancelEditing,
       mealName,
       startEdit,
+      deleteMeal,
     } = this.props;
     const { expanded } = this.state;
     return (
@@ -48,11 +50,11 @@ class Meal extends Component {
               onChangeText={onTitleChange}
               onSubmitEditing={onSubmitEditing}
             />
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={onSubmitEditing}
-            >
+            <TouchableOpacity style={styles.button} onPress={onSubmitEditing}>
               <MaterialIcons name="check" size={ICON_SIZE} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={onCancelEditing}>
+              <MaterialIcons name="clear" size={ICON_SIZE} />
             </TouchableOpacity>
           </View>
         ) : (
@@ -61,28 +63,39 @@ class Meal extends Component {
             onPress={() => {
               this.setState(oldState => {
                 return {
-                  expanded: data.items.length ? !oldState.expanded : false,
+                  expanded: !oldState.expanded,
                 };
               });
             }}
           >
             <Text style={styles.text}>{data.name}</Text>
             <TouchableOpacity
-              style={styles.editButton}
+              style={styles.button}
               onPress={() => startEdit(data.name)}
             >
               <MaterialIcons name="edit" size={ICON_SIZE} />
             </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={deleteMeal}>
+              <MaterialIcons name="delete" size={ICON_SIZE} />
+            </TouchableOpacity>
           </TouchableOpacity>
         )}
-        {expanded &&
-          data.items.map(mealItem => {
+        {expanded && [
+          ...data.items.map(mealItem => {
             // show each individual meal item
             return [
               <HorizontalSeperator key={0} />,
               <MealItem key={1} data={mealItem} />,
             ];
-          })}
+          }),
+          <TouchableOpacity style={styles.addItem}>
+            <MaterialIcons
+              style={styles.addButton}
+              name="add"
+              size={ICON_SIZE}
+            />
+          </TouchableOpacity>,
+        ]}
       </View>
     );
   }
@@ -99,10 +112,20 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 20,
   },
-  editButton: {
+  button: {
     alignSelf: 'center',
     justifyContent: 'center',
     marginRight: 20,
+  },
+  addItem: {
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    backgroundColor: '#9df'
+  },
+  addButton: {
+    marginRight: 20
   },
 });
 

@@ -16,6 +16,8 @@ class MealList extends Component {
       mealNameChanged,
       editMeal,
       startEdit,
+      deleteMeal,
+      cancelEdit,
     } = this.props;
     const editing = editMode && modifyingIndex > -1;
     const adding = editMode && !editing;
@@ -37,8 +39,10 @@ class MealList extends Component {
               editing={editing && i === modifyingIndex}
               onTitleChange={mealNameChanged}
               onSubmitEditing={editMeal}
+              onCancelEditing={cancelEdit}
               mealName={mealName}
               startEdit={name => startEdit(name, i)}
+              deleteMeal={() => deleteMeal(i)}
             />,
             <HorizontalSeperator key={1} />,
           ];
@@ -51,6 +55,7 @@ class MealList extends Component {
             editing={true}
             onTitleChange={mealNameChanged}
             onSubmitEditing={addMeal}
+            onCancelEditing={cancelEdit}
             mealName={mealName}
           />,
           <HorizontalSeperator key={1} />,
