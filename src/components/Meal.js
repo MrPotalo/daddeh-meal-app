@@ -88,7 +88,7 @@ class Meal extends Component {
               <MealItem key={1} data={mealItem} />,
             ];
           }),
-          <TouchableOpacity style={styles.addItem}>
+          <TouchableOpacity key={"add"} style={styles.addItem}>
             <MaterialIcons
               style={styles.addButton}
               name="add"
