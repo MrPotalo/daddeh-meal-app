@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import {
   KeyboardAvoidingView,
   Text,
@@ -42,18 +43,21 @@ class MealScreen extends Component {
     this._retrieveData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    this._storeData();
+  componentDidUpdate() {
+    if (!_.isEqual(this._lastItemData, this.state.items)) {
+      this._storeData();
+    }
   }
 
   _retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('meals');
       if (value) {
-        this.setState({ items: JSON.parse(value) });
+        this._lastItemData = JSON.parse(value);
       } else {
-        this.setState({ items: [] });
+        this._lastItemData = [];
       }
+      this.setState({ items: _.cloneDeep(this._lastItemData) });
     } catch (e) {
       console.log('error retrieving data');
     }
@@ -62,7 +66,7 @@ class MealScreen extends Component {
   _storeData = async () => {
     try {
       AsyncStorage.setItem('meals', JSON.stringify(this.state.items || []));
-      console.log('saved');
+      this._lastItemData = _.cloneDeep(this.state.items);
     } catch (e) {
       console.log('error saving');
     }
