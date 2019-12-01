@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, Text, StyleSheet } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Text,
+  StyleSheet,
+  AsyncStorage,
+} from 'react-native';
 
 import MealList from '../components/MealList';
 import MealListControlBar from './../components/MealListControlBar';
@@ -9,7 +14,7 @@ class MealScreen extends Component {
     super(props);
 
     this.state = {
-      items: [
+      /* items: [
         {
           name: 'Breakfast',
           items: [
@@ -26,12 +31,42 @@ class MealScreen extends Component {
             { name: 'another burger', color: 'blue' },
           ],
         },
-      ],
+      ], */
       editMode: false,
       modifyingIndex: -1,
       mealName: '',
     };
   }
+
+  componentWillMount() {
+    this._retrieveData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this._storeData();
+  }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('meals');
+      if (value) {
+        this.setState({ items: JSON.parse(value) });
+      } else {
+        this.setState({ items: [] });
+      }
+    } catch (e) {
+      console.log('error retrieving data');
+    }
+  };
+
+  _storeData = async () => {
+    try {
+      AsyncStorage.setItem('meals', JSON.stringify(this.state.items || []));
+      console.log('saved');
+    } catch (e) {
+      console.log('error saving');
+    }
+  };
 
   mealNameChanged = mealName => {
     this.setState({ mealName });
@@ -104,7 +139,8 @@ class MealScreen extends Component {
 
   render() {
     const { style } = this.props;
-    return (
+    const { items } = this.state;
+    return items ? (
       <KeyboardAvoidingView enabled behavior="padding" style={style}>
         <MealListControlBar onAdd={this.onAddButtonPress} />
         <MealList
@@ -117,7 +153,7 @@ class MealScreen extends Component {
           deleteMeal={this.deleteMeal}
         />
       </KeyboardAvoidingView>
-    );
+    ) : null;
   }
 }
 

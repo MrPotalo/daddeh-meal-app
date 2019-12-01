@@ -88,7 +88,7 @@ class Meal extends Component {
               <MealItem key={1} data={mealItem} />,
             ];
           }),
-          <TouchableOpacity key={"add"} style={styles.addItem}>
+          <TouchableOpacity key={'add'} style={styles.addItem}>
             <MaterialIcons
               style={styles.addButton}
               name="add"
@@ -122,10 +122,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
   },
   addButton: {
-    marginRight: 20
+    marginRight: 20,
   },
 });
 
