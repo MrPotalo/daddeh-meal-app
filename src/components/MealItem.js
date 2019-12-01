@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Text, StyleSheet } from 'react-native';
 
 class MealItem extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ class MealItem extends Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, adding, addMealItemName, mealItemNameChanged } = this.props;
     return (
       <View style={styles.mealItemContainer}>
         <View
@@ -19,7 +19,16 @@ class MealItem extends Component {
           }}
         />
         <View style={styles.mealItemInfo}>
-          <Text style={styles.text}>{data.name}</Text>
+          {adding ? (
+            <TextInput
+              style={styles.text}
+              onChangeText={mealItemNameChanged}
+              onSubmitEditing={addMealItemName}
+              ref={ref => ref && ref.focus()}
+            />
+          ) : (
+            <Text style={styles.text}>{data.name}</Text>
+          )}
         </View>
       </View>
     );

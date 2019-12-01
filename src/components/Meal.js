@@ -33,6 +33,11 @@ class Meal extends Component {
       mealName,
       startEdit,
       deleteMeal,
+      onAddMealItemPress,
+      editingItem,
+      mealItemName,
+      mealItemNameChanged,
+      addMealItemName,
     } = this.props;
     const { expanded } = this.state;
     return (
@@ -81,20 +86,34 @@ class Meal extends Component {
           </TouchableOpacity>
         )}
         {expanded && [
-          ...data.items.map(mealItem => {
+          ...data.items.map((mealItem, i) => {
             // show each individual meal item
             return [
               <HorizontalSeperator key={0} />,
               <MealItem key={1} data={mealItem} />,
             ];
           }),
-          <TouchableOpacity key={'add'} style={styles.addItem}>
-            <MaterialIcons
-              style={styles.addButton}
-              name="add"
-              size={ICON_SIZE}
+          editingItem ? (
+            <MealItem
+              key={'add'}
+              data={{ name: mealItemName, color: '#fff' }}
+              mealItemNameChanged={mealItemNameChanged}
+              addMealItemName={addMealItemName}
+              adding={true}
             />
-          </TouchableOpacity>,
+          ) : (
+            <TouchableOpacity
+              key={'add'}
+              style={styles.addItem}
+              onPress={onAddMealItemPress}
+            >
+              <MaterialIcons
+                style={styles.addButton}
+                name="add"
+                size={ICON_SIZE}
+              />
+            </TouchableOpacity>
+          ),
         ]}
       </View>
     );

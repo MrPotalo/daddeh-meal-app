@@ -9,10 +9,15 @@ import {
 
 import MealList from '../components/MealList';
 import MealListControlBar from './../components/MealListControlBar';
+import { dayStringFromDate } from './../utils/dateUtils';
+import { MEAL_EDIT } from '../constants/editModes';
+import { MEAL_ADD, MEAL_ITEM_ADD } from './../constants/editModes';
 
 class MealScreen extends Component {
   constructor(props) {
     super(props);
+
+    const date = new Date();
 
     this.state = {
       /* items: [
@@ -33,7 +38,9 @@ class MealScreen extends Component {
           ],
         },
       ], */
-      editMode: false,
+      date,
+      editMode: null,
+      mealIndex: -1,
       modifyingIndex: -1,
       mealName: '',
     };
@@ -44,14 +51,21 @@ class MealScreen extends Component {
   }
 
   componentDidUpdate() {
-    if (!_.isEqual(this._lastItemData, this.state.items)) {
+    if (this.state.items === null) {
+      this._retrieveData();
+    } else if (
+      this.state.items !== null &&
+      !_.isEqual(this._lastItemData, this.state.items)
+    ) {
       this._storeData();
     }
   }
 
   _retrieveData = async () => {
+    const { date } = this.state;
+    const day = dayStringFromDate(date);
     try {
-      const value = await AsyncStorage.getItem('meals');
+      const value = await AsyncStorage.getItem(`meals_${day}`);
       if (value) {
         this._lastItemData = JSON.parse(value);
       } else {
@@ -64,8 +78,13 @@ class MealScreen extends Component {
   };
 
   _storeData = async () => {
+    const { date } = this.state;
+    const day = dayStringFromDate(date);
     try {
-      AsyncStorage.setItem('meals', JSON.stringify(this.state.items || []));
+      AsyncStorage.setItem(
+        `meals_${day}`,
+        JSON.stringify(this.state.items || [])
+      );
       this._lastItemData = _.cloneDeep(this.state.items);
     } catch (e) {
       console.log('error saving');
@@ -77,14 +96,13 @@ class MealScreen extends Component {
   };
 
   onAddButtonPress = () => {
-    const { editMode, modifyingIndex, mealName } = this.state;
-    const editing = editMode && modifyingIndex > -1;
-    const adding = editMode && !editing;
+    const { editMode, mealName } = this.state;
+    const adding = editMode === MEAL_ADD;
     if (adding && mealName !== '') {
       this.addMeal(mealName);
     }
     this.setState({
-      editMode: true,
+      editMode: MEAL_ADD,
     });
   };
 
@@ -95,7 +113,7 @@ class MealScreen extends Component {
       }
       return {
         items: [...prevState.items, { name: prevState.mealName, items: [] }],
-        editMode: false,
+        editMode: null,
         modifyingIndex: -1,
         mealName: '',
       };
@@ -104,7 +122,7 @@ class MealScreen extends Component {
 
   startEdit = (name, i) => {
     this.setState({
-      editMode: true,
+      editMode: MEAL_EDIT,
       mealName: name,
       modifyingIndex: i,
     });
@@ -116,7 +134,7 @@ class MealScreen extends Component {
       items[prevState.modifyingIndex].name = prevState.mealName;
       return {
         items,
-        editMode: false,
+        editMode: null,
         modifyingIndex: -1,
         mealName: '',
       };
@@ -136,28 +154,70 @@ class MealScreen extends Component {
   cancelEdit = () => {
     this.setState({
       modifyingIndex: -1,
-      editMode: false,
+      editMode: null,
       mealName: '',
     });
   };
 
+  addMealItem = i => {
+    this.setState({
+      editMode: MEAL_ITEM_ADD,
+      modifyingIndex: i,
+      mealItemName: '',
+    });
+  };
+
+  mealItemNameChanged = mealItemName => {
+    this.setState({ mealItemName });
+  };
+
+  addMealItemName = () => {
+    this.setState(prevState => {
+      const items = [...prevState.items];
+      items[prevState.modifyingIndex].items.push({
+        name: prevState.mealItemName,
+        color: '#fff',
+      });
+      return {
+        items,
+        modifyingIndex: -1,
+        mealItemName: '',
+        editMode: null,
+      };
+    });
+  };
+
+  changeDate = date => {
+    // setting items to null will retrieve data when the component updates
+    this.setState({ date, items: null });
+  };
+
   render() {
     const { style } = this.props;
-    const { items } = this.state;
-    return items ? (
+    const { items, date } = this.state;
+    return (
       <KeyboardAvoidingView enabled behavior="padding" style={style}>
-        <MealListControlBar onAdd={this.onAddButtonPress} />
-        <MealList
-          {...this.state}
-          addMeal={this.addMeal}
-          mealNameChanged={this.mealNameChanged}
-          startEdit={this.startEdit}
-          cancelEdit={this.cancelEdit}
-          editMeal={this.editMeal}
-          deleteMeal={this.deleteMeal}
+        <MealListControlBar
+          onAdd={this.onAddButtonPress}
+          onDateChange={this.changeDate}
+          currentDate={date}
         />
+        {items && (
+          <MealList
+            {...this.state}
+            addMeal={this.addMeal}
+            mealNameChanged={this.mealNameChanged}
+            startEdit={this.startEdit}
+            cancelEdit={this.cancelEdit}
+            editMeal={this.editMeal}
+            deleteMeal={this.deleteMeal}
+            onAddMealItemPress={this.addMealItem}
+            mealItemNameChanged={this.mealItemNameChanged}
+            addMealItemName={this.addMealItemName}
+          />
+        )}
       </KeyboardAvoidingView>
-    ) : null;
+    );
   }
 }
 
