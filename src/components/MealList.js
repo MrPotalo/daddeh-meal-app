@@ -51,6 +51,7 @@ class MealList extends Component {
             editing={true}
             onTitleChange={mealNameChanged}
             onSubmitEditing={addMeal}
+            mealName={mealName}
           />,
           <HorizontalSeperator key={1} />,
         ]}

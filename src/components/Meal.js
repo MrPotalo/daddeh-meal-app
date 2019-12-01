@@ -40,7 +40,11 @@ class Meal extends Component {
             <TextInput
               style={styles.text}
               value={mealName}
-              ref={ref => ref && ref.focus()}
+              ref={ref => {
+                if (ref) {
+                  ref.focus();
+                }
+              }}
               onChangeText={onTitleChange}
               onSubmitEditing={onSubmitEditing}
             />

@@ -42,14 +42,10 @@ class MealScreen extends Component {
     const editing = editMode && modifyingIndex > -1;
     const adding = editMode && !editing;
     if (adding && mealName !== '') {
-      console.log(mealName);
       this.addMeal(mealName);
     }
-    this.setState(prevState => {
-      return {
-        ...prevState,
-        editMode: true,
-      };
+    this.setState({
+      editMode: true,
     });
   };
 
@@ -59,7 +55,6 @@ class MealScreen extends Component {
         return {};
       }
       return {
-        ...prevState,
         items: [...prevState.items, { name: prevState.mealName, items: [] }],
         editMode: false,
         modifyingIndex: -1,
