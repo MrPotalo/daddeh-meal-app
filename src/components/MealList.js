@@ -31,7 +31,9 @@ class MealList extends Component {
         keyboardDismissMode="on-drag"
         style={styles.container}
         ref={scrollView => {
-          editMode === MEAL_ADD && scrollView && scrollView.scrollToEnd({ animated: true });
+          editMode === MEAL_ADD &&
+            scrollView &&
+            scrollView.scrollToEnd({ animated: true });
         }}
       >
         {items.map((meal, i) => {
@@ -42,8 +44,8 @@ class MealList extends Component {
               data={meal}
               editing={editMode === MEAL_EDIT && i === modifyingIndex}
               editingItem={
-                (i === modifyingIndex && editMode === MEAL_ITEM_EDIT) ||
-                editMode === MEAL_ITEM_ADD
+                (i === modifyingIndex && (editMode === MEAL_ITEM_EDIT ||
+                editMode === MEAL_ITEM_ADD))
               }
               onTitleChange={mealNameChanged}
               onSubmitEditing={editMeal}

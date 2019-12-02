@@ -39,12 +39,17 @@ class MealScreen extends Component {
         },
       ], */
       date,
-      editMode: null,
-      mealIndex: -1,
-      modifyingIndex: -1,
-      mealName: '',
+      ...this.resetState,
     };
   }
+
+  resetState = {
+    editMode: null,
+    mealIndex: -1,
+    modifyingIndex: -1,
+    mealName: '',
+    mealItemName: '',
+  };
 
   componentWillMount() {
     this._retrieveData();
@@ -113,9 +118,7 @@ class MealScreen extends Component {
       }
       return {
         items: [...prevState.items, { name: prevState.mealName, items: [] }],
-        editMode: null,
-        modifyingIndex: -1,
-        mealName: '',
+        ...this.resetState,
       };
     });
   };
@@ -134,9 +137,7 @@ class MealScreen extends Component {
       items[prevState.modifyingIndex].name = prevState.mealName;
       return {
         items,
-        editMode: null,
-        modifyingIndex: -1,
-        mealName: '',
+        ...this.resetState,
       };
     });
   };
@@ -153,9 +154,7 @@ class MealScreen extends Component {
 
   cancelEdit = () => {
     this.setState({
-      modifyingIndex: -1,
-      editMode: null,
-      mealName: '',
+      ...this.resetState,
     });
   };
 
@@ -180,9 +179,7 @@ class MealScreen extends Component {
       });
       return {
         items,
-        modifyingIndex: -1,
-        mealItemName: '',
-        editMode: null,
+        ...this.resetState,
       };
     });
   };

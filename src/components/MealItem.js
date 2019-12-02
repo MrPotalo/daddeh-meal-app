@@ -5,7 +5,9 @@ class MealItem extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      checked: false
+    };
   }
 
   render() {
