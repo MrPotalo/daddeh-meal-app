@@ -93,16 +93,18 @@ class Meal extends Component {
               <MealItem key={1} data={mealItem} />,
             ];
           }),
-          editingItem ? [
-            <HorizontalSeperator key={'addSeperator'} />,
-            <MealItem
-              key={'add'}
-              data={{ name: mealItemName, color: '#fff' }}
-              mealItemNameChanged={mealItemNameChanged}
-              addMealItemName={addMealItemName}
-              adding={true}
-            />
-           ] : (
+          editingItem ? (
+            [
+              <HorizontalSeperator key={'addSeperator'} />,
+              <MealItem
+                key={'add'}
+                data={{ name: mealItemName, color: '#fff' }}
+                mealItemNameChanged={mealItemNameChanged}
+                addMealItemName={addMealItemName}
+                adding={true}
+              />,
+            ]
+          ) : (
             <TouchableOpacity
               key={'add'}
               style={styles.addItem}

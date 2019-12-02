@@ -20,24 +20,6 @@ class MealScreen extends Component {
     const date = new Date();
 
     this.state = {
-      /* items: [
-        {
-          name: 'Breakfast',
-          items: [
-            { name: 'bacon', color: 'brown' },
-            { name: 'eggs', color: 'yellow' },
-            { name: 'cereal', color: 'red' },
-          ],
-        },
-        {
-          name: 'Lunch',
-          items: [
-            { name: 'burger', color: 'orange' },
-            { name: 'more burger', color: 'red' },
-            { name: 'another burger', color: 'blue' },
-          ],
-        },
-      ], */
       date,
       ...this.resetState,
     };

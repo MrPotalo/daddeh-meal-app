@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { ICON_SIZE } from '../constants/styleConstants';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class MealItem extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      checked: false
+      checked: false,
     };
   }
 
   render() {
     const { data, adding, addMealItemName, mealItemNameChanged } = this.props;
+    const { checked } = this.state;
     return (
       <View style={styles.mealItemContainer}>
         <View
@@ -19,7 +23,9 @@ class MealItem extends Component {
             ...styles.mealItemColor,
             backgroundColor: data.color,
           }}
-        />
+        >
+          {checked && <MaterialIcons name="cancel" size={ICON_SIZE} />}
+        </View>
         <View style={styles.mealItemInfo}>
           {adding ? (
             <TextInput
@@ -29,7 +35,16 @@ class MealItem extends Component {
               ref={ref => ref && ref.focus()}
             />
           ) : (
-            <Text style={styles.text}>{data.name}</Text>
+            <TouchableOpacity
+              style={styles.mealItemBar}
+              onPress={() =>
+                this.setState(prevState => {
+                  return { checked: !prevState.checked };
+                })
+              }
+            >
+              <Text style={styles.text}>{data.name}</Text>
+            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -48,7 +63,10 @@ const styles = StyleSheet.create({
   },
   mealItemInfo: {
     flex: 1,
-    borderLeftWidth: 1,
+    borderLeftWidth: 1
+  },
+  mealItemBar: {
+    height: '100%'
   },
   text: {
     marginLeft: 5,
