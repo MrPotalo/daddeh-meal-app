@@ -6,6 +6,7 @@ import {
   Text,
   TextInput,
   StyleSheet,
+  Easing,
 } from 'react-native';
 
 import MealItem from './MealItem';
@@ -16,6 +17,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 class Meal extends Component {
   constructor(props) {
     super(props);
+
+    this.animateHeight = new Animated.Value(0);
 
     this.state = {
       expanded: false,
@@ -48,20 +51,30 @@ class Meal extends Component {
     const { index, setEditPath } = this.props;
 
     setEditPath([index]);
-  }
+  };
 
   deleteMeal = () => {
     const { index, modifyMeal, doneEditing } = this.props;
 
     modifyMeal(null, index);
     doneEditing();
-  }
+  };
 
   addMealItemPress = () => {
     const { index, data, setEditPath } = this.props;
 
     setEditPath([index, data.items.length]);
-  }
+  };
+
+  expandClicked = () => {
+    const { expanded } = this.state;
+
+    !expanded && this.setState({ expanded: !expanded });
+    Animated.timing(this.animateHeight, {
+      toValue: expanded ? 0 : 1,
+      duration: 150,
+    }).start(() => expanded && this.setState({ expanded: !expanded }));
+  };
 
   render() {
     const {
@@ -74,6 +87,17 @@ class Meal extends Component {
       setEditPath,
     } = this.props;
     const { expanded, mealName } = this.state;
+
+    const animatedStyle = {
+      overflow: 'hidden',
+      flex: 1,
+      height: this.animateHeight.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 50 * (data.items.length + 1)],
+        extrapolateLeft: 'clamp'
+      })
+    }
+
     return (
       <View style={style}>
         {editing ? (
@@ -99,19 +123,10 @@ class Meal extends Component {
         ) : (
           <TouchableOpacity
             style={styles.mealContainer}
-            onPress={() => {
-              this.setState(oldState => {
-                return {
-                  expanded: !oldState.expanded,
-                };
-              });
-            }}
+            onPress={this.expandClicked}
           >
             <Text style={styles.text}>{data.name}</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={this.startEdit}
-            >
+            <TouchableOpacity style={styles.button} onPress={this.startEdit}>
               <MaterialIcons name="edit" size={ICON_SIZE} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={this.deleteMeal}>
@@ -119,40 +134,52 @@ class Meal extends Component {
             </TouchableOpacity>
           </TouchableOpacity>
         )}
-        {expanded && [
-          ...data.items.map((mealItem, i) => {
-            // show each individual meal item
-            return [
-              <HorizontalSeperator key={0} />,
-              <MealItem key={1} index={i} data={mealItem} doneEditing={doneEditing} setEditPath={setEditPath} />,
-            ];
-          }),
-          editPath[0] === index && editPath[1] === data.items.length ? (
-            [
-              <HorizontalSeperator key={'addSeperator'} />,
-              <MealItem
-                key={'add'}
-                index={data.items.length}
-                data={{ name: '', color: '#fff' }}
-                mealItemModified={this.mealItemModified}
-                doneEditing={doneEditing}
-                adding={true}
-              />,
-            ]
-          ) : (
-            <TouchableOpacity
-              key={'add'}
-              style={styles.addItem}
-              onPress={this.addMealItemPress}
-            >
-              <MaterialIcons
-                style={styles.addButton}
-                name="add"
-                size={ICON_SIZE}
-              />
-            </TouchableOpacity>
-          ),
-        ]}
+        {expanded && (
+          <Animated.View
+            style={animatedStyle}
+          >
+            {[
+              ...data.items.map((mealItem, i) => {
+                // show each individual meal item
+                return [
+                  <HorizontalSeperator key={0} />,
+                  <MealItem
+                    key={1}
+                    index={i}
+                    data={mealItem}
+                    doneEditing={doneEditing}
+                    setEditPath={setEditPath}
+                  />,
+                ];
+              }),
+              editPath[0] === index && editPath[1] === data.items.length ? (
+                [
+                  <HorizontalSeperator key={'addSeperator'} />,
+                  <MealItem
+                    key={'add'}
+                    index={data.items.length}
+                    data={{ name: '', color: '#fff' }}
+                    mealItemModified={this.mealItemModified}
+                    doneEditing={doneEditing}
+                    adding={true}
+                  />,
+                ]
+              ) : (
+                <TouchableOpacity
+                  key={'add'}
+                  style={styles.addItem}
+                  onPress={this.addMealItemPress}
+                >
+                  <MaterialIcons
+                    style={styles.addButton}
+                    name="add"
+                    size={ICON_SIZE}
+                  />
+                </TouchableOpacity>
+              ),
+            ]}
+          </Animated.View>
+        )}
       </View>
     );
   }

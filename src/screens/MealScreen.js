@@ -26,7 +26,7 @@ class MealScreen extends Component {
   }
 
   resetState = {
-    editPath: []
+    editPath: [],
   };
 
   componentWillMount() {
@@ -88,13 +88,13 @@ class MealScreen extends Component {
     });
   };
 
-  setEditPath = (editPath) => {
+  setEditPath = editPath => {
     this.setState({ editPath });
-  }
+  };
 
   resetEditState = () => {
     this.setState({ ...this.resetState });
-  }
+  };
 
   onAddButtonPress = () => {
     const { items } = this.state;

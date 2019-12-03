@@ -14,7 +14,7 @@ class MealList extends Component {
       editPath,
       modifyMeal,
       doneEditing,
-      setEditPath
+      setEditPath,
     } = this.props;
     return (
       <ScrollView
@@ -38,18 +38,19 @@ class MealList extends Component {
             <HorizontalSeperator key={1} />,
           ];
         })}
-        {editPath[0] === items.length && !(editPath[1] > -1) && [
-          <Meal
-            key={0}
-            index={items.length}
-            style={styles.meal}
-            data={{ name: '', items: [] }}
-            editing={true}
-            modifyMeal={modifyMeal}
-            doneEditing={doneEditing}
-          />,
-          <HorizontalSeperator key={1} />,
-        ]}
+        {editPath[0] === items.length &&
+          !(editPath[1] > -1) && [
+            <Meal
+              key={0}
+              index={items.length}
+              style={styles.meal}
+              data={{ name: '', items: [] }}
+              editing={true}
+              modifyMeal={modifyMeal}
+              doneEditing={doneEditing}
+            />,
+            <HorizontalSeperator key={1} />,
+          ]}
       </ScrollView>
     );
   }
