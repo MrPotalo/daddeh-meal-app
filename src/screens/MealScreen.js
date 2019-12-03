@@ -26,11 +26,7 @@ class MealScreen extends Component {
   }
 
   resetState = {
-    editMode: null,
-    mealIndex: -1,
-    modifyingIndex: -1,
-    mealName: '',
-    mealItemName: '',
+    editPath: []
   };
 
   componentWillMount() {
@@ -78,91 +74,36 @@ class MealScreen extends Component {
     }
   };
 
-  mealNameChanged = mealName => {
-    this.setState({ mealName });
+  modifyMeal = (item, i) => {
+    this.setState(prevState => {
+      const items = prevState.items.slice();
+      if (!items[i]) {
+        items.push(item);
+      } else if (!item && items[i]) {
+        items.splice(i, 1);
+      } else {
+        items[i] = item;
+      }
+      return { items };
+    });
   };
+
+  setEditPath = (editPath) => {
+    this.setState({ editPath });
+  }
+
+  resetEditState = () => {
+    this.setState({ ...this.resetState });
+  }
 
   onAddButtonPress = () => {
-    const { editMode, mealName } = this.state;
-    const adding = editMode === MEAL_ADD;
+    const { items } = this.state;
+    /* const adding = editMode === MEAL_ADD;
     if (adding && mealName !== '') {
       this.addMeal(mealName);
-    }
+    } */
     this.setState({
-      editMode: MEAL_ADD,
-    });
-  };
-
-  addMeal = () => {
-    this.setState(prevState => {
-      if (prevState.mealName === '') {
-        return {};
-      }
-      return {
-        items: [...prevState.items, { name: prevState.mealName, items: [] }],
-        ...this.resetState,
-      };
-    });
-  };
-
-  startEdit = (name, i) => {
-    this.setState({
-      editMode: MEAL_EDIT,
-      mealName: name,
-      modifyingIndex: i,
-    });
-  };
-
-  editMeal = () => {
-    this.setState(prevState => {
-      const items = prevState.items.slice();
-      items[prevState.modifyingIndex].name = prevState.mealName;
-      return {
-        items,
-        ...this.resetState,
-      };
-    });
-  };
-
-  deleteMeal = i => {
-    this.setState(prevState => {
-      const items = prevState.items.slice();
-      items.splice(i, 1);
-      return {
-        items,
-      };
-    });
-  };
-
-  cancelEdit = () => {
-    this.setState({
-      ...this.resetState,
-    });
-  };
-
-  addMealItem = i => {
-    this.setState({
-      editMode: MEAL_ITEM_ADD,
-      modifyingIndex: i,
-      mealItemName: '',
-    });
-  };
-
-  mealItemNameChanged = mealItemName => {
-    this.setState({ mealItemName });
-  };
-
-  addMealItemName = () => {
-    this.setState(prevState => {
-      const items = [...prevState.items];
-      items[prevState.modifyingIndex].items.push({
-        name: prevState.mealItemName,
-        color: '#fff',
-      });
-      return {
-        items,
-        ...this.resetState,
-      };
+      editPath: [items.length],
     });
   };
 
@@ -173,7 +114,7 @@ class MealScreen extends Component {
 
   render() {
     const { style } = this.props;
-    const { items, date } = this.state;
+    const { items, date, editPath } = this.state;
     return (
       <KeyboardAvoidingView enabled behavior="padding" style={style}>
         <MealListControlBar
@@ -183,16 +124,12 @@ class MealScreen extends Component {
         />
         {items && (
           <MealList
-            {...this.state}
-            addMeal={this.addMeal}
-            mealNameChanged={this.mealNameChanged}
-            startEdit={this.startEdit}
-            cancelEdit={this.cancelEdit}
-            editMeal={this.editMeal}
-            deleteMeal={this.deleteMeal}
-            onAddMealItemPress={this.addMealItem}
-            mealItemNameChanged={this.mealItemNameChanged}
-            addMealItemName={this.addMealItemName}
+            items={items}
+            date={date}
+            editPath={editPath}
+            modifyMeal={this.modifyMeal}
+            setEditPath={this.setEditPath}
+            doneEditing={this.resetEditState}
           />
         )}
       </KeyboardAvoidingView>

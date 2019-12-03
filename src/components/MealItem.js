@@ -10,12 +10,21 @@ class MealItem extends Component {
 
     this.state = {
       checked: false,
+      mealItemName: props.data.name,
     };
   }
 
+  setItemName = () => {
+    const { data, index, mealItemModified, doneEditing } = this.props;
+    const { mealItemName } = this.state;
+
+    mealItemModified({ ...data, name: mealItemName }, index);
+    doneEditing();
+  };
+
   render() {
-    const { data, adding, addMealItemName, mealItemNameChanged } = this.props;
-    const { checked } = this.state;
+    const { data, adding } = this.props;
+    const { checked, mealItemName } = this.state;
     return (
       <View style={styles.mealItemContainer}>
         <View
@@ -30,8 +39,9 @@ class MealItem extends Component {
           {adding ? (
             <TextInput
               style={styles.text}
-              onChangeText={mealItemNameChanged}
-              onSubmitEditing={addMealItemName}
+              value={mealItemName}
+              onChangeText={text => this.setState({ mealItemName: text })}
+              onSubmitEditing={this.setItemName}
               ref={ref => ref && ref.focus()}
             />
           ) : (
@@ -63,10 +73,10 @@ const styles = StyleSheet.create({
   },
   mealItemInfo: {
     flex: 1,
-    borderLeftWidth: 1
+    borderLeftWidth: 1,
   },
   mealItemBar: {
-    height: '100%'
+    height: '100%',
   },
   text: {
     marginLeft: 5,

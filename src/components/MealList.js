@@ -11,66 +11,42 @@ class MealList extends Component {
   render() {
     const {
       items,
-      editMode,
-      modifyingIndex,
-      addMeal,
-      mealName,
-      mealNameChanged,
-      editMeal,
-      startEdit,
-      deleteMeal,
-      cancelEdit,
-      onAddMealItemPress,
-      mealItemName,
-      mealItemNameChanged,
-      addMealItemName,
+      editPath,
+      modifyMeal,
+      doneEditing,
+      setEditPath
     } = this.props;
     return (
       <ScrollView
         keyboardShouldPersistTaps="always"
         keyboardDismissMode="on-drag"
         style={styles.container}
-        ref={scrollView => {
-          editMode === MEAL_ADD &&
-            scrollView &&
-            scrollView.scrollToEnd({ animated: true });
-        }}
       >
         {items.map((meal, i) => {
           return [
             <Meal
               key={0}
+              index={i}
               style={styles.meal}
               data={meal}
-              editing={editMode === MEAL_EDIT && i === modifyingIndex}
-              editingItem={
-                i === modifyingIndex &&
-                (editMode === MEAL_ITEM_EDIT || editMode === MEAL_ITEM_ADD)
-              }
-              onTitleChange={mealNameChanged}
-              onSubmitEditing={editMeal}
-              onCancelEditing={cancelEdit}
-              mealName={mealName}
-              startEdit={name => startEdit(name, i)}
-              deleteMeal={() => deleteMeal(i)}
-              onAddMealItemPress={() => onAddMealItemPress(i)}
-              mealItemNameChanged={mealItemNameChanged}
-              mealItemName={mealItemName}
-              addMealItemName={addMealItemName}
+              editing={editPath[0] === i && !(editPath[1] > -1)}
+              editPath={editPath}
+              modifyMeal={modifyMeal}
+              doneEditing={doneEditing}
+              setEditPath={setEditPath}
             />,
             <HorizontalSeperator key={1} />,
           ];
         })}
-        {editMode === MEAL_ADD && [
+        {editPath[0] === items.length && !(editPath[1] > -1) && [
           <Meal
             key={0}
+            index={items.length}
             style={styles.meal}
             data={{ name: '', items: [] }}
             editing={true}
-            onTitleChange={mealNameChanged}
-            onSubmitEditing={addMeal}
-            onCancelEditing={cancelEdit}
-            mealName={mealName}
+            modifyMeal={modifyMeal}
+            doneEditing={doneEditing}
           />,
           <HorizontalSeperator key={1} />,
         ]}

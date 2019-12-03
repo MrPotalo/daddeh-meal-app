@@ -19,27 +19,61 @@ class Meal extends Component {
 
     this.state = {
       expanded: false,
+      mealName: this.props.data.name,
     };
+  }
+
+  mealItemModified = (item, i) => {
+    const { data, modifyMeal, index } = this.props;
+    const items = data.items.slice();
+    if (!items[i]) {
+      items[i] = item;
+    } else if (!item && items[i]) {
+      items.splice(i, 1);
+    } else {
+      items[i] = item;
+    }
+    modifyMeal({ ...data, items }, index);
+  };
+
+  setMealName = () => {
+    const { data, index, modifyMeal, doneEditing } = this.props;
+    const { mealName } = this.state;
+
+    modifyMeal({ ...data, name: mealName }, index);
+    doneEditing();
+  };
+
+  startEdit = () => {
+    const { index, setEditPath } = this.props;
+
+    setEditPath([index]);
+  }
+
+  deleteMeal = () => {
+    const { index, modifyMeal, doneEditing } = this.props;
+
+    modifyMeal(null, index);
+    doneEditing();
+  }
+
+  addMealItemPress = () => {
+    const { index, data, setEditPath } = this.props;
+
+    setEditPath([index, data.items.length]);
   }
 
   render() {
     const {
       style,
       data,
+      index,
       editing,
-      onTitleChange,
-      onSubmitEditing,
-      onCancelEditing,
-      mealName,
-      startEdit,
-      deleteMeal,
-      onAddMealItemPress,
-      editingItem,
-      mealItemName,
-      mealItemNameChanged,
-      addMealItemName,
+      editPath,
+      doneEditing,
+      setEditPath,
     } = this.props;
-    const { expanded } = this.state;
+    const { expanded, mealName } = this.state;
     return (
       <View style={style}>
         {editing ? (
@@ -52,13 +86,13 @@ class Meal extends Component {
                   ref.focus();
                 }
               }}
-              onChangeText={onTitleChange}
-              onSubmitEditing={onSubmitEditing}
+              onChangeText={mealName => this.setState({ mealName })}
+              onSubmitEditing={this.setMealName}
             />
-            <TouchableOpacity style={styles.button} onPress={onSubmitEditing}>
+            <TouchableOpacity style={styles.button} onPress={this.setMealName}>
               <MaterialIcons name="check" size={ICON_SIZE} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={onCancelEditing}>
+            <TouchableOpacity style={styles.button} onPress={doneEditing}>
               <MaterialIcons name="clear" size={ICON_SIZE} />
             </TouchableOpacity>
           </View>
@@ -76,11 +110,11 @@ class Meal extends Component {
             <Text style={styles.text}>{data.name}</Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => startEdit(data.name)}
+              onPress={this.startEdit}
             >
               <MaterialIcons name="edit" size={ICON_SIZE} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={deleteMeal}>
+            <TouchableOpacity style={styles.button} onPress={this.deleteMeal}>
               <MaterialIcons name="delete" size={ICON_SIZE} />
             </TouchableOpacity>
           </TouchableOpacity>
@@ -90,17 +124,18 @@ class Meal extends Component {
             // show each individual meal item
             return [
               <HorizontalSeperator key={0} />,
-              <MealItem key={1} data={mealItem} />,
+              <MealItem key={1} index={i} data={mealItem} doneEditing={doneEditing} setEditPath={setEditPath} />,
             ];
           }),
-          editingItem ? (
+          editPath[0] === index && editPath[1] === data.items.length ? (
             [
               <HorizontalSeperator key={'addSeperator'} />,
               <MealItem
                 key={'add'}
-                data={{ name: mealItemName, color: '#fff' }}
-                mealItemNameChanged={mealItemNameChanged}
-                addMealItemName={addMealItemName}
+                index={data.items.length}
+                data={{ name: '', color: '#fff' }}
+                mealItemModified={this.mealItemModified}
+                doneEditing={doneEditing}
                 adding={true}
               />,
             ]
@@ -108,7 +143,7 @@ class Meal extends Component {
             <TouchableOpacity
               key={'add'}
               style={styles.addItem}
-              onPress={onAddMealItemPress}
+              onPress={this.addMealItemPress}
             >
               <MaterialIcons
                 style={styles.addButton}
