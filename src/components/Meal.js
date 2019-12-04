@@ -43,7 +43,7 @@ class Meal extends Component {
     const { data, index, modifyMeal, doneEditing } = this.props;
     const { mealName } = this.state;
 
-    modifyMeal({ ...data, name: mealName }, index);
+    modifyMeal(mealName === '' ? null : { ...data, name: mealName }, index);
     doneEditing();
   };
 
@@ -148,6 +148,7 @@ class Meal extends Component {
                     mealItemModified={this.mealItemModified}
                     doneEditing={doneEditing}
                     setEditPath={() => setEditPath([index, i])}
+                    editing={editPath[0] === index && editPath[1] === i}
                   />,
                 ];
               }),
@@ -161,7 +162,7 @@ class Meal extends Component {
                     mealItemModified={this.mealItemModified}
                     doneEditing={doneEditing}
                     setEditPath={() => setEditPath([index, data.items.length])}
-                    adding={true}
+                    editing={true}
                   />,
                 ]
               ) : (

@@ -78,6 +78,9 @@ class MealScreen extends Component {
     this.setState(prevState => {
       const items = prevState.items.slice();
       if (!items[i]) {
+        if (!item) {
+          return {};
+        }
         items.push(item);
       } else if (!item && items[i]) {
         items.splice(i, 1);

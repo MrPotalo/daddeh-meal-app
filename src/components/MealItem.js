@@ -18,7 +18,7 @@ class MealItem extends Component {
     const { data, index, mealItemModified, doneEditing } = this.props;
     const { mealItemName } = this.state;
 
-    mealItemModified({ ...data, name: mealItemName }, index);
+    mealItemModified(mealItemName === '' ? null : { ...data, name: mealItemName }, index);
     doneEditing();
   };
 
@@ -29,10 +29,10 @@ class MealItem extends Component {
   };
 
   render() {
-    const { data, adding, doneEditing, setEditPath } = this.props;
+    const { data, editing, doneEditing, setEditPath } = this.props;
     const { checked, mealItemName } = this.state;
 
-    if (adding) {
+    if (editing) {
       return (
         <View style={styles.mealItemContainer}>
           <View
