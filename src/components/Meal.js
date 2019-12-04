@@ -93,10 +93,10 @@ class Meal extends Component {
       flex: 1,
       height: this.animateHeight.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 50 * (data.items.length + 1)],
-        extrapolateLeft: 'clamp'
-      })
-    }
+        outputRange: [0, 51 * (data.items.length + 1)],
+        extrapolateLeft: 'clamp',
+      }),
+    };
 
     return (
       <View style={style}>
@@ -147,8 +147,9 @@ class Meal extends Component {
                     key={1}
                     index={i}
                     data={mealItem}
+                    mealItemModified={this.mealItemModified}
                     doneEditing={doneEditing}
-                    setEditPath={setEditPath}
+                    setEditPath={() => setEditPath([index, i])}
                   />,
                 ];
               }),
@@ -161,6 +162,7 @@ class Meal extends Component {
                     data={{ name: '', color: '#fff' }}
                     mealItemModified={this.mealItemModified}
                     doneEditing={doneEditing}
+                    setEditPath={() => setEditPath([index, data.items.length])}
                     adding={true}
                   />,
                 ]

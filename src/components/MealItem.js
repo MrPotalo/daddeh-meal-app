@@ -22,8 +22,14 @@ class MealItem extends Component {
     doneEditing();
   };
 
+  deleteItem = () => {
+    const { index, mealItemModified } = this.props;
+
+    mealItemModified(null, index);
+  };
+
   render() {
-    const { data, adding } = this.props;
+    const { data, adding, doneEditing, setEditPath } = this.props;
     const { checked, mealItemName } = this.state;
     return (
       <View style={styles.mealItemContainer}>
@@ -33,10 +39,10 @@ class MealItem extends Component {
             backgroundColor: data.color,
           }}
         >
-          {checked && <MaterialIcons name="cancel" size={ICON_SIZE} />}
+          {checked && <MaterialIcons name="clear" size={50} />}
         </View>
-        <View style={styles.mealItemInfo}>
-          {adding ? (
+        {adding ? (
+          <View style={styles.mealItemInfo}>
             <TextInput
               style={styles.text}
               value={mealItemName}
@@ -44,19 +50,37 @@ class MealItem extends Component {
               onSubmitEditing={this.setItemName}
               ref={ref => ref && ref.focus()}
             />
-          ) : (
             <TouchableOpacity
-              style={styles.mealItemBar}
-              onPress={() =>
-                this.setState(prevState => {
-                  return { checked: !prevState.checked };
-                })
-              }
+              style={styles.button}
+              onPress={this.setItemName}
             >
-              <Text style={styles.text}>{data.name}</Text>
+              <MaterialIcons name="check" size={ICON_SIZE} />
             </TouchableOpacity>
-          )}
-        </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={doneEditing}
+            >
+              <MaterialIcons name="clear" size={ICON_SIZE} />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={styles.mealItemInfo}
+            onPress={() =>
+              this.setState(prevState => {
+                return { checked: !prevState.checked };
+              })
+            }
+          >
+            <Text style={styles.text}>{data.name}</Text>
+            {/*<TouchableOpacity style={styles.button} onPress={setEditPath}>
+              <MaterialIcons name="edit" size={ICON_SIZE} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={this.deleteItem}>
+              <MaterialIcons name="delete" size={ICON_SIZE} />
+          </TouchableOpacity>*/}
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -74,13 +98,20 @@ const styles = StyleSheet.create({
   mealItemInfo: {
     flex: 1,
     borderLeftWidth: 1,
+    justifyContent: 'center',
   },
-  mealItemBar: {
+  button: {
     height: '100%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginRight: 20,
+  },
+  textView: {
+    flex: 1,
+    borderWidth: 1
   },
   text: {
     marginLeft: 5,
-    alignSelf: 'flex-start',
   },
 });
 
