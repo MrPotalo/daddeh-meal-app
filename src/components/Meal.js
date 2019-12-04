@@ -135,9 +135,7 @@ class Meal extends Component {
           </TouchableOpacity>
         )}
         {expanded && (
-          <Animated.View
-            style={animatedStyle}
-          >
+          <Animated.View style={animatedStyle}>
             {[
               ...data.items.map((mealItem, i) => {
                 // show each individual meal item

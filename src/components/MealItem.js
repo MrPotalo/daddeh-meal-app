@@ -31,6 +31,30 @@ class MealItem extends Component {
   render() {
     const { data, adding, doneEditing, setEditPath } = this.props;
     const { checked, mealItemName } = this.state;
+
+    if (adding) {
+      return (
+        <View style={styles.mealItemContainer}>
+          <View
+            style={{ ...styles.mealItemColor, backgroundColor: data.color }}
+          />
+          <TextInput
+            style={[styles.mealItemInfo, styles.text]}
+            value={mealItemName}
+            onChangeText={text => this.setState({ mealItemName: text })}
+            onSubmitEditing={this.setItemName}
+            ref={ref => ref && ref.focus()}
+          ></TextInput>
+          <TouchableOpacity style={styles.button} onPress={this.setItemName}>
+            <MaterialIcons name="check" size={ICON_SIZE} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={doneEditing}>
+            <MaterialIcons name="clear" size={ICON_SIZE} />
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.mealItemContainer}>
         <View
@@ -41,46 +65,17 @@ class MealItem extends Component {
         >
           {checked && <MaterialIcons name="clear" size={50} />}
         </View>
-        {adding ? (
-          <View style={styles.mealItemInfo}>
-            <TextInput
-              style={styles.text}
-              value={mealItemName}
-              onChangeText={text => this.setState({ mealItemName: text })}
-              onSubmitEditing={this.setItemName}
-              ref={ref => ref && ref.focus()}
-            />
-            <TouchableOpacity
-              style={styles.button}
-              onPress={this.setItemName}
-            >
-              <MaterialIcons name="check" size={ICON_SIZE} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={doneEditing}
-            >
-              <MaterialIcons name="clear" size={ICON_SIZE} />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={styles.mealItemInfo}
-            onPress={() =>
-              this.setState(prevState => {
-                return { checked: !prevState.checked };
-              })
-            }
-          >
-            <Text style={styles.text}>{data.name}</Text>
-            {/*<TouchableOpacity style={styles.button} onPress={setEditPath}>
-              <MaterialIcons name="edit" size={ICON_SIZE} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={this.deleteItem}>
-              <MaterialIcons name="delete" size={ICON_SIZE} />
-          </TouchableOpacity>*/}
-          </TouchableOpacity>
-        )}
+        <View
+          style={styles.mealItemInfo}
+        >
+          <Text style={styles.text}>{data.name}</Text>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={setEditPath}>
+          <MaterialIcons name="edit" size={ICON_SIZE} />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={this.deleteItem}>
+          <MaterialIcons name="delete" size={ICON_SIZE} />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -94,21 +89,17 @@ const styles = StyleSheet.create({
   mealItemColor: {
     height: '100%',
     aspectRatio: 1,
+    borderRightWidth: 1,
   },
   mealItemInfo: {
     flex: 1,
-    borderLeftWidth: 1,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   button: {
     height: '100%',
     alignSelf: 'center',
     justifyContent: 'center',
     marginRight: 20,
-  },
-  textView: {
-    flex: 1,
-    borderWidth: 1
   },
   text: {
     marginLeft: 5,
