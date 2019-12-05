@@ -6,12 +6,16 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  Easing,
 } from 'react-native';
 
 import MealItem from './MealItem';
 import HorizontalSeperator from './HorizontalSeperator';
-import { MEAL_HEIGHT, ICON_SIZE } from './../constants/styleConstants';
+import {
+  MEAL_HEIGHT,
+  ICON_SIZE,
+  commonStyles,
+  MEAL_ITEM_HEIGHT,
+} from './../constants/styleConstants';
 import { MaterialIcons } from '@expo/vector-icons';
 
 class Meal extends Component {
@@ -113,10 +117,13 @@ class Meal extends Component {
               onChangeText={mealName => this.setState({ mealName })}
               onSubmitEditing={this.setMealName}
             />
-            <TouchableOpacity style={styles.button} onPress={this.setMealName}>
+            <TouchableOpacity
+              style={commonStyles.button}
+              onPress={this.setMealName}
+            >
               <MaterialIcons name="check" size={ICON_SIZE} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={doneEditing}>
+            <TouchableOpacity style={commonStyles.button} onPress={doneEditing}>
               <MaterialIcons name="clear" size={ICON_SIZE} />
             </TouchableOpacity>
           </View>
@@ -126,10 +133,16 @@ class Meal extends Component {
             onPress={this.expandClicked}
           >
             <Text style={styles.text}>{data.name}</Text>
-            <TouchableOpacity style={styles.button} onPress={this.startEdit}>
+            <TouchableOpacity
+              style={commonStyles.button}
+              onPress={this.startEdit}
+            >
               <MaterialIcons name="edit" size={ICON_SIZE} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={this.deleteMeal}>
+            <TouchableOpacity
+              style={commonStyles.button}
+              onPress={this.deleteMeal}
+            >
               <MaterialIcons name="delete" size={ICON_SIZE} />
             </TouchableOpacity>
           </TouchableOpacity>
@@ -197,13 +210,8 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 20,
   },
-  button: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    marginRight: 20,
-  },
   addItem: {
-    height: 50,
+    height: MEAL_ITEM_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',

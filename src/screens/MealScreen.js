@@ -11,8 +11,6 @@ import {
 import MealList from '../components/MealList';
 import MealListControlBar from './../components/MealListControlBar';
 import { dayStringFromDate } from './../utils/dateUtils';
-import { MEAL_EDIT } from '../constants/editModes';
-import { MEAL_ADD, MEAL_ITEM_ADD } from './../constants/editModes';
 
 class MealScreen extends Component {
   constructor(props) {

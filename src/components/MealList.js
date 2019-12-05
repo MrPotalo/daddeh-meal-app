@@ -4,8 +4,6 @@ import { ScrollView, View, TextInput, StyleSheet } from 'react-native';
 import Meal from './Meal';
 import HorizontalSeperator from './HorizontalSeperator';
 import { MEAL_HEIGHT } from './../constants/styleConstants';
-import { MEAL_EDIT, MEAL_ITEM_EDIT } from '../constants/editModes';
-import { MEAL_ADD, MEAL_ITEM_ADD } from './../constants/editModes';
 
 class MealList extends Component {
   render() {

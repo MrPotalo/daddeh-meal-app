@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { ICON_SIZE } from '../constants/styleConstants';
+import {
+  ICON_SIZE,
+  commonStyles,
+  MEAL_ITEM_HEIGHT,
+} from '../constants/styleConstants';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 class MealItem extends Component {
@@ -48,10 +52,13 @@ class MealItem extends Component {
             onSubmitEditing={this.setItemName}
             ref={ref => ref && ref.focus()}
           ></TextInput>
-          <TouchableOpacity style={styles.button} onPress={this.setItemName}>
+          <TouchableOpacity
+            style={commonStyles.button}
+            onPress={this.setItemName}
+          >
             <MaterialIcons name="check" size={ICON_SIZE} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={doneEditing}>
+          <TouchableOpacity style={commonStyles.button} onPress={doneEditing}>
             <MaterialIcons name="clear" size={ICON_SIZE} />
           </TouchableOpacity>
         </View>
@@ -66,15 +73,15 @@ class MealItem extends Component {
             backgroundColor: data.color,
           }}
         >
-          {checked && <MaterialIcons name="clear" size={50} />}
+          {checked && <MaterialIcons name="clear" size={MEAL_ITEM_HEIGHT} />}
         </View>
         <View style={styles.mealItemInfo}>
           <Text style={styles.text}>{data.name}</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={setEditPath}>
+        <TouchableOpacity style={commonStyles.button} onPress={setEditPath}>
           <MaterialIcons name="edit" size={ICON_SIZE} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={this.deleteItem}>
+        <TouchableOpacity style={commonStyles.button} onPress={this.deleteItem}>
           <MaterialIcons name="delete" size={ICON_SIZE} />
         </TouchableOpacity>
       </View>
@@ -84,7 +91,7 @@ class MealItem extends Component {
 
 const styles = StyleSheet.create({
   mealItemContainer: {
-    height: 50,
+    height: MEAL_ITEM_HEIGHT,
     flexDirection: 'row',
   },
   mealItemColor: {
@@ -95,12 +102,6 @@ const styles = StyleSheet.create({
   mealItemInfo: {
     flex: 1,
     justifyContent: 'center',
-  },
-  button: {
-    height: '100%',
-    alignSelf: 'center',
-    justifyContent: 'center',
-    marginRight: 20,
   },
   text: {
     marginLeft: 5,
