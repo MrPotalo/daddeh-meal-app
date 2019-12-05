@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   AsyncStorage,
+  Alert,
 } from 'react-native';
 
 import MealList from '../components/MealList';
@@ -75,20 +76,31 @@ class MealScreen extends Component {
   };
 
   modifyMeal = (item, i) => {
-    this.setState(prevState => {
-      const items = prevState.items.slice();
-      if (!items[i]) {
-        if (!item) {
-          return {};
+    if (!item && this.state.items[i]) {
+      Alert.alert('Delete?', 'Are you sure you want to delete this meal?', [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'OK',
+          onPress: () => {
+            this.setState(prevState => {
+              const items = prevState.items.slice();
+              items.splice(i, 1);
+              return { items };
+            });
+          },
+        },
+      ]);
+    } else {
+      this.setState(prevState => {
+        const items = prevState.items.slice();
+        if (!items[i] && item) {
+          items.push(item);
+        } else if (items[i] && item) {
+          items[i] = item;
         }
-        items.push(item);
-      } else if (!item && items[i]) {
-        items.splice(i, 1);
-      } else {
-        items[i] = item;
-      }
-      return { items };
-    });
+        return { items };
+      });
+    }
   };
 
   setEditPath = editPath => {

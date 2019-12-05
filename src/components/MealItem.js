@@ -18,7 +18,10 @@ class MealItem extends Component {
     const { data, index, mealItemModified, doneEditing } = this.props;
     const { mealItemName } = this.state;
 
-    mealItemModified(mealItemName === '' ? null : { ...data, name: mealItemName }, index);
+    mealItemModified(
+      mealItemName === '' ? null : { ...data, name: mealItemName },
+      index
+    );
     doneEditing();
   };
 
@@ -65,9 +68,7 @@ class MealItem extends Component {
         >
           {checked && <MaterialIcons name="clear" size={50} />}
         </View>
-        <View
-          style={styles.mealItemInfo}
-        >
+        <View style={styles.mealItemInfo}>
           <Text style={styles.text}>{data.name}</Text>
         </View>
         <TouchableOpacity style={styles.button} onPress={setEditPath}>
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
   mealItemInfo: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   button: {
     height: '100%',
