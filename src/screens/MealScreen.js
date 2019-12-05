@@ -80,7 +80,7 @@ class MealScreen extends Component {
         {
           text: 'OK',
           onPress: () => {
-            this.setState(prevState => {
+            this.setState((prevState) => {
               const items = prevState.items.slice();
               items.splice(i, 1);
               return { items };
@@ -89,7 +89,7 @@ class MealScreen extends Component {
         },
       ]);
     } else {
-      this.setState(prevState => {
+      this.setState((prevState) => {
         const items = prevState.items.slice();
         if (!items[i] && item) {
           items.push(item);
@@ -101,7 +101,7 @@ class MealScreen extends Component {
     }
   };
 
-  setEditPath = editPath => {
+  setEditPath = (editPath) => {
     this.setState({ editPath });
   };
 
@@ -120,7 +120,7 @@ class MealScreen extends Component {
     });
   };
 
-  changeDate = date => {
+  changeDate = (date) => {
     // setting items to null will retrieve data when the component updates
     this.setState({ date, items: null });
   };

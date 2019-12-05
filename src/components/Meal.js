@@ -109,12 +109,12 @@ class Meal extends Component {
             <TextInput
               style={styles.text}
               value={mealName}
-              ref={ref => {
+              ref={(ref) => {
                 if (ref) {
                   ref.focus();
                 }
               }}
-              onChangeText={mealName => this.setState({ mealName })}
+              onChangeText={(mealName) => this.setState({ mealName })}
               onSubmitEditing={this.setMealName}
             />
             <TouchableOpacity

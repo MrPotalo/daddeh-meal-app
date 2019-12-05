@@ -27,7 +27,7 @@ class MealListControlBar extends Component {
     this.setState({ isDatePickerVisible: false });
   };
 
-  confirmDate = date => {
+  confirmDate = (date) => {
     this.props.onDateChange(date);
     this.hideDatePicker();
   };

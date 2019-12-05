@@ -48,9 +48,9 @@ class MealItem extends Component {
           <TextInput
             style={[styles.mealItemInfo, styles.text]}
             value={mealItemName}
-            onChangeText={text => this.setState({ mealItemName: text })}
+            onChangeText={(text) => this.setState({ mealItemName: text })}
             onSubmitEditing={this.setItemName}
-            ref={ref => ref && ref.focus()}
+            ref={(ref) => ref && ref.focus()}
           ></TextInput>
           <TouchableOpacity
             style={commonStyles.button}
