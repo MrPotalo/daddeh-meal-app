@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll",
-    "dev": "yarn prettier && expo start",
+    "dev": "expo start",
     "prettier": "prettier --write ./**/*.{js,json}"
   },
   "jest": {
@@ -33,9 +33,16 @@
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0",
+    "husky": "^3.1.0",
     "jest-expo": "^35.0.0",
     "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
     "proptypes": "^1.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "private": true
 }
