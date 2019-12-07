@@ -6,6 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
+    "build": "expo build:android -t apk",
     "test": "jest --watchAll",
     "dev": "expo start",
     "prettier": "prettier --write ./**/*.{js,json}"
