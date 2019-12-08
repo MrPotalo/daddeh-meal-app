@@ -52,8 +52,9 @@ class Meal extends Component {
   };
 
   startEdit = () => {
-    const { index, setEditPath } = this.props;
+    const { index, setEditPath, data } = this.props;
 
+    this.setState({ mealName: data.name });
     setEditPath([index]);
   };
 

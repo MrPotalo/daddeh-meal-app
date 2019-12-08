@@ -18,6 +18,13 @@ class MealItem extends Component {
     };
   }
 
+  startEdit = () => {
+    const { setEditPath, data } = this.props;
+
+    this.setState({ mealItemName: data.name });
+    setEditPath();
+  }
+
   setItemName = () => {
     const { data, index, mealItemModified, doneEditing } = this.props;
     const { mealItemName } = this.state;
@@ -36,7 +43,7 @@ class MealItem extends Component {
   };
 
   render() {
-    const { data, editing, doneEditing, setEditPath } = this.props;
+    const { data, editing, doneEditing } = this.props;
     const { checked, mealItemName } = this.state;
 
     if (editing) {
@@ -78,7 +85,7 @@ class MealItem extends Component {
         <View style={styles.mealItemInfo}>
           <Text style={styles.text}>{data.name}</Text>
         </View>
-        <TouchableOpacity style={commonStyles.button} onPress={setEditPath}>
+        <TouchableOpacity style={commonStyles.button} onPress={this.startEdit}>
           <MaterialIcons name="edit" size={ICON_SIZE} />
         </TouchableOpacity>
         <TouchableOpacity style={commonStyles.button} onPress={this.deleteItem}>
