@@ -13,7 +13,6 @@ class MealItem extends Component {
     super(props);
 
     this.state = {
-      checked: false,
       mealItemName: props.data.name,
     };
   }
@@ -42,9 +41,16 @@ class MealItem extends Component {
     mealItemModified(null, index);
   };
 
+  mealItemChecked = () => {
+    const { data, index, mealItemModified } = this.props;
+
+    mealItemModified({...data, checked: !data.checked }, index);
+  }
+
   render() {
     const { data, editing, doneEditing } = this.props;
-    const { checked, mealItemName } = this.state;
+    const { mealItemName } = this.state;
+    const { checked } = data;
 
     if (editing) {
       return (
@@ -74,14 +80,15 @@ class MealItem extends Component {
 
     return (
       <View style={styles.mealItemContainer}>
-        <View
+        <TouchableOpacity
+          onPress={this.mealItemChecked}
           style={{
             ...styles.mealItemColor,
             backgroundColor: data.color,
           }}
         >
           {checked && <MaterialIcons name="clear" size={MEAL_ITEM_HEIGHT} />}
-        </View>
+        </TouchableOpacity>
         <View style={styles.mealItemInfo}>
           <Text style={styles.text}>{data.name}</Text>
         </View>
