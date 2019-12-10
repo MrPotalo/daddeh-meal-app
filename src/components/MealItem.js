@@ -5,8 +5,10 @@ import {
   ICON_SIZE,
   commonStyles,
   MEAL_ITEM_HEIGHT,
+  COLORS,
 } from '../constants/styleConstants';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import ColorPicker from './ColorPicker';
 
 class MealItem extends Component {
   constructor(props) {
@@ -22,7 +24,7 @@ class MealItem extends Component {
 
     this.setState({ mealItemName: data.name });
     setEditPath();
-  }
+  };
 
   setItemName = () => {
     const { data, index, mealItemModified, doneEditing } = this.props;
@@ -44,8 +46,14 @@ class MealItem extends Component {
   mealItemChecked = () => {
     const { data, index, mealItemModified } = this.props;
 
-    mealItemModified({...data, checked: !data.checked }, index);
-  }
+    mealItemModified({ ...data, checked: !data.checked }, index);
+  };
+
+  mealItemColorChange = (color) => {
+    const { data, index, mealItemModified } = this.props;
+
+    mealItemModified({ ...data, color }, index);
+  };
 
   render() {
     const { data, editing, doneEditing } = this.props;
@@ -55,8 +63,11 @@ class MealItem extends Component {
     if (editing) {
       return (
         <View style={styles.mealItemContainer}>
-          <View
+          <ColorPicker
             style={{ ...styles.mealItemColor, backgroundColor: data.color }}
+            values={COLORS}
+            selected={data.color || COLORS[0]}
+            onChange={this.mealItemColorChange}
           />
           <TextInput
             style={[styles.mealItemInfo, styles.text]}

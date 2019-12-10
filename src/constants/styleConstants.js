@@ -3,6 +3,14 @@ import { StyleSheet } from 'react-native';
 export const MEAL_HEIGHT = 70;
 export const MEAL_ITEM_HEIGHT = 50;
 export const ICON_SIZE = 30;
+export const COLORS = [
+  '#ffffff',
+  '#ff0000',
+  '#0055ff',
+  '#00dd00',
+  '#ff6600',
+  '#af00ff',
+];
 
 export const commonStyles = StyleSheet.create({
   button: {
