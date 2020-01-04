@@ -16,22 +16,23 @@ class MealItem extends Component {
 
     this.state = {
       mealItemName: props.data.name,
+      color: props.data.color
     };
   }
 
   startEdit = () => {
     const { setEditPath, data } = this.props;
 
-    this.setState({ mealItemName: data.name });
+    this.setState({ mealItemName: data.name, color: data.color });
     setEditPath();
   };
 
   setItemName = () => {
     const { data, index, mealItemModified, doneEditing } = this.props;
-    const { mealItemName } = this.state;
+    const { mealItemName, color } = this.state;
 
     mealItemModified(
-      mealItemName === '' ? null : { ...data, name: mealItemName },
+      mealItemName === '' ? null : { ...data, name: mealItemName, color },
       index
     );
     doneEditing();
@@ -50,14 +51,12 @@ class MealItem extends Component {
   };
 
   mealItemColorChange = (color) => {
-    const { data, index, mealItemModified } = this.props;
-
-    mealItemModified({ ...data, color }, index);
+    this.setState({ color });
   };
 
   render() {
     const { data, editing, doneEditing } = this.props;
-    const { mealItemName } = this.state;
+    const { mealItemName, color } = this.state;
     const { checked } = data;
 
     if (editing) {
@@ -66,7 +65,7 @@ class MealItem extends Component {
           <ColorPicker
             style={{ ...styles.mealItemColor, backgroundColor: data.color }}
             values={COLORS}
-            selected={data.color || COLORS[0]}
+            selected={color || COLORS[0]}
             onChange={this.mealItemColorChange}
           />
           <TextInput

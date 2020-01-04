@@ -4,6 +4,15 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { MEAL_ITEM_HEIGHT } from '../constants/styleConstants';
 
 export default class ColorPicker extends Component {
+  
+
+  static propTypes = {
+    style: PropTypes.object,
+    values: PropTypes.array.isRequired,
+    selected: PropTypes.string.isRequired,
+    onChange: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
 
@@ -38,7 +47,6 @@ export default class ColorPicker extends Component {
       />,
       ...(expanded
         ? values
-            .filter((val) => val !== selected)
             .map((value, i) => {
               return (
                 <TouchableOpacity
@@ -60,10 +68,3 @@ export default class ColorPicker extends Component {
     ];
   }
 }
-
-ColorPicker.propTypes = {
-  style: PropTypes.object,
-  values: PropTypes.array.isRequired,
-  selected: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
-};
